@@ -1,7 +1,7 @@
 # Tech Layoffs & AI Impact Analysis
 ### A Business Analyst Portfolio Project
 
-**Dataset:** 12,000 records across 7 tech industries | **Tools:** SQL · Python · Data Visualization  
+**Dataset:** 12,000 records across 7 tech industries | **Tools:** SQL · AI · Data Visualization  
 **Role target:** Business Analyst | **Topics:** Workforce trends, AI adoption, financial impact
 
 ---
@@ -23,16 +23,16 @@ Using a dataset of 12,000 company-level records spanning industry, layoff counts
 | Field | Description |
 |---|---|
 | `industry` | Tech sub-sector (AI, Cloud, FinTech, Gaming, Cybersecurity, E-Commerce, Social Media) |
-| `layoff_percentage` | Share of workforce laid off per event |
-| `ai_adoption_level` | Company AI adoption score (0–10 scale) |
-| `ai_automation_impact` | Estimated automation impact score |
-| `ai_replacement_risk` | AI job replacement risk score |
-| `stock_growth_percent` | Stock price change associated with the period |
-| `revenue_growth_percent` | Revenue change for the same period |
+| `layoff_percentag` | Share of workforce laid off per event |
+| `ai_adoption_leve` | Company AI adoption score (0–10 scale) |
+| `ai_automation_imp` | Estimated automation impact score |
+| `ai_replacement_r` | AI job replacement risk score |
+| `stock_growth_per` | Stock price change associated with the period |
+| `revenue_growth_p` | Revenue change for the same period |
 | `market_condition` | Bull Market / Stable / Recession |
-| `reason_for_layoffs` | Stated reason (AI Automation, Overhiring, Restructuring, Cost Cutting, Market Slowdown) |
+| `reason_for_layof` | Stated reason (AI Automation, Overhiring, Restructuring, Cost Cutting, Market Slowdown) |
 | `hiring_trend` | Direction of hiring activity |
-| `remote_jobs_percentage` | Share of open roles that are remote |
+| `remote_jobs_perc` | Share of open roles that are remote |
 
 ---
 
@@ -75,19 +75,19 @@ If AI automation were a genuine structural driver of layoffs, its share would be
 -- Industry layoff rates ranked
 SELECT
   industry,
-  ROUND(AVG(layoff_percentage), 2)   AS avg_layoff_pct,
-  ROUND(AVG(ai_adoption_level), 2)   AS avg_ai_adoption,
+  ROUND(AVG(layoff_percentag), 2)   AS avg_layoff_pct,
+  ROUND(AVG(ai_adoption_leve), 2)   AS avg_ai_adoption,
   COUNT(*)                           AS records
-FROM layoffs
+FROM tech_layoffs_hiring_trends_elite_v2
 GROUP BY industry
 ORDER BY avg_layoff_pct DESC;
 
 -- Layoff reason distribution
 SELECT
-  reason_for_layoffs,
+  reason_for_layof,
   COUNT(*)                                              AS total,
   ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 1)   AS pct_of_total
-FROM layoffs
+FROM tech_layoffs_hiring_trends_elite_v2
 GROUP BY reason_for_layoffs
 ORDER BY total DESC;
 ```
@@ -135,27 +135,27 @@ The conventional wisdom that "layoffs signal discipline and boost shareholder va
 -- Bucket layoff severity and compare stock growth
 SELECT
   CASE
-    WHEN layoff_percentage = 0        THEN 'No layoffs (0%)'
-    WHEN layoff_percentage <= 5       THEN 'Small (1-5%)'
-    WHEN layoff_percentage <= 15      THEN 'Medium (6-15%)'
-    WHEN layoff_percentage <= 25      THEN 'Large (16-25%)'
+    WHEN layoff_percentag = 0        THEN 'No layoffs (0%)'
+    WHEN layoff_percentag <= 5       THEN 'Small (1-5%)'
+    WHEN layoff_percentag <= 15      THEN 'Medium (6-15%)'
+    WHEN layoff_percentag <= 25      THEN 'Large (16-25%)'
     ELSE                                   'Severe (26%+)'
   END                                 AS layoff_bucket,
-  ROUND(AVG(stock_growth_percent), 2) AS avg_stock_growth,
-  ROUND(AVG(layoff_percentage), 2)    AS avg_layoff_pct,
+  ROUND(AVG(stock_growth_per), 2) AS avg_stock_growth,
+  ROUND(AVG(layoff_percentag), 2)    AS avg_layoff_pct,
   COUNT(*)                            AS records
-FROM layoffs
+FROM tech_layoffs_hiring_trends_elite_v2
 GROUP BY layoff_bucket
 ORDER BY avg_layoff_pct ASC;
 
 -- Market condition breakdown: the key comparison
 SELECT
   market_condition,
-  ROUND(AVG(layoff_percentage), 2)      AS avg_layoff_pct,
-  ROUND(AVG(stock_growth_percent), 2)   AS avg_stock_growth,
-  ROUND(AVG(revenue_growth_percent), 2) AS avg_rev_growth,
+  ROUND(AVG(layoff_percentag), 2)      AS avg_layoff_pct,
+  ROUND(AVG(stock_growth_per), 2)   AS avg_stock_growth,
+  ROUND(AVG(revenue_growth_per), 2) AS avg_rev_growth,
   COUNT(*)                              AS records
-FROM layoffs
+FROM tech_layoffs_hiring_trends_elite_v2
 GROUP BY market_condition
 ORDER BY avg_layoff_pct ASC;
 ```
@@ -193,7 +193,7 @@ ORDER BY avg_layoff_pct ASC;
 
 ## Methodology Notes
 
-- Records with `layoff_percentage = 0` represent a very small sample (n=20) and were treated as an edge case rather than a meaningful group in the stock analysis.
+- Records with `layoff_percentag = 0` represent a very small sample (n=20) and were treated as an edge case rather than a meaningful group in the stock analysis.
 - All averages are unweighted — each company-event record counts equally regardless of company size.
 - Correlation analysis was visual (bucket comparison) rather than statistical (Pearson r). A follow-on analysis could compute formal correlation coefficients using `CORR()` in PostgreSQL or equivalent.
 - Dataset covers multiple years; temporal trends (month/year analysis) are reserved for a follow-on analysis of hiring trends.
@@ -205,12 +205,11 @@ ORDER BY avg_layoff_pct ASC;
 - [ ] Hiring trends over time — which roles are growing, is remote work holding?
 - [ ] Geographic AI replacement risk — which countries face the most displacement?
 - [ ] Formal correlation analysis using `CORR()` in PostgreSQL
-- [ ] Python visualizations exported as static charts for embedding
 
 ---
 
 ## About This Project
 
-Built as part of a self-directed business analyst portfolio. Analysis performed in SQL and Python. Dataset: `tech_layoffs_hiring_trends_elite_v2.csv` (12,000 rows, 23 columns).
+Built as part of a self-directed business analyst portfolio. Analysis performed in SQL. Dataset: `tech_layoffs_hiring_trends_elite_v2.csv` (12,000 rows, 23 columns).
 
 *Interested in collaborating or have feedback? Open an issue or connect on LinkedIn.*
