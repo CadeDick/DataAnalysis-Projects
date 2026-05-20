@@ -200,14 +200,6 @@ ORDER BY avg_layoff_pct ASC;
 
 ---
 
-## Next Steps (in progress)
-
-- [ ] Hiring trends over time — which roles are growing, is remote work holding?
-- [ ] Geographic AI replacement risk — which countries face the most displacement?
-- [ ] Formal correlation analysis using `CORR()` in PostgreSQL
-
----
-
 ## About This Project
 
 Built as part of a self-directed business analyst portfolio. Analysis performed in SQL. Dataset: `tech_layoffs_hiring_trends_elite_v2.csv` (12,000 rows, 23 columns).
